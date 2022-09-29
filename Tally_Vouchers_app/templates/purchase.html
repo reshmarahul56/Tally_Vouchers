@@ -1,9 +1,134 @@
 {% extends 'base.html' %}
 {% block body %}
 {% load static %}
-
+<style>
+  .ScrollStyle{
+            /* max-height: 200px; */
+            overflow-y: scroll;
+        } 
+ .close {
+            position: absolute;
+            top: 3px;
+            right: 8px;
+            font-size: 17px;
+            transform: rotate(0deg);
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+            text-decoration: none;
+        }
+  .form-popup {
+    display: none;
+            position: fixed;
+            top: 150px;
+            right: 15px;
+            border: 1px solid #f1f1f1;
+            z-index: 9;
+            width: 300px;
+            height: 550px;
+    }
+  
+    .content a:hover { background-color: rgb(238, 167, 75);}
+    
+    /* Add styles to the form container */
+    .form-container {
+      max-width: 50px;
+            height: 500px;
+            padding: 10px;
+    }
+    .form-container1 {
+      max-width: 350px;
+            height: 600px;
+            padding: 2px; 
+     
+    }
+   option{
+       margin-left: 10px;
+       color: black;
+   }
+   .scrollbar {
+      margin-left: 20px;
+      float: left;
+      height: 300px;
+      width: 270px;
+      background: rgb(216, 232, 238);
+      overflow-y: scroll;
+      margin-bottom: 25px;
+    }
+    
+    
+    .scrollbar-primary::-webkit-scrollbar {
+      overflow-y: scroll;
+      
+    }
+    
+    .scrollbar-primary::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 4px rgba(214, 57, 9, 0.1);
+      background-color: #dd9078;
+    }
+    
+    .scrollbar-primary {
+      scrollbar-color: #86d5f5 #f1f3f3;
+    }
+    .btns_prnt{
+      width: 100%;
+            cursor:pointer;
+            background-color: rgba(240, 248, 255, 0);
+            color: white;
+            border: none;
+  }
+  .btns_prnt:hover{
+    background-color:#5bc9e4;
+            color: rgb(15, 14, 14);
+  }
+  .bt{
+            text-align: end;
+        }
+  </style>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
 
+
+  function showgrp(){
+      document.getElementById('myForm1').style.visibility= "visible";
+      document.getElementById("myForm1").style.display = "block";
+  }
+  function showgrp1(){
+      document.getElementById('myForm1').style.visibility= "visible";
+      document.getElementById("myForm2").style.display = "block";
+  }
+
+  function setData(gr){
+        document.getElementById('under').value= gr;
+        document.getElementById('rndlmt20').style.display = "none";
+        document.getElementById('myForm1').style.visibility= "hidden";
+        }
+        
+    
+        
+        function setData1(gr){
+        document.getElementById('under1').value= gr;
+        document.getElementById('rndlmt20').style.display = "none";
+        document.getElementById('myForm2').style.visibility= "hidden";
+        }
+        
+        function setGroup(under,underId){
+            document.getElementById('under').value= under;
+            document.getElementById('myForm1').style.visibility= "hidden";
+            document.getElementsByName('underhidden').value= underId;
+        }
+        function setGroup1(under,underId){
+            document.getElementById('under1').value= under;
+            document.getElementById('myForm2').style.visibility= "hidden";
+            document.getElementsByName('underhidden').value= underId;
+        }
+        function closeForm() {
+        document.getElementById("myForm1").style.display = "none";
+        }
+        function closeForm1() {
+        document.getElementById("myForm2").style.display = "none";
+        }
+</script>
 <form action="{% url 'purchase' %} " method="POST" class="post-form">
   {% csrf_token %}
 
@@ -17,35 +142,14 @@
             <div class="row mt-4">
                 <div class="table-responsive">
             
-                 <b>Supplier Invoice number:<input type="number" name="invoiceno"></b> <b> Date:<input type="date" name="date"></h2></b> <br>  
+                <h5>Supplier Invoice number:</h5><input type="number" name="invoiceno"></b> <b> &nbsp;  Date:<input type="date" name="date"></h2></b> <br>  
                             </td>
                             </td><br>
-                 <b>Party A/c number:<select name='particulars' class="form-control">
-                
-                  {% for led in led %}
-                
-                  <option value="{{led.id}} ">
-                    <li>{{led.name}}</li>
-                    {% endfor %}
-                  </option>
-              
-                  <option> <li> <a href= ""> Create </a></li></option>
-                  
-
-                </select> </b><br>
-                 Current balance:<br>
-                 Purchase ledger:<select name='particulars' class="form-control">
-                  {% for led in led %}
-                
-                  <option value="{{led.id}} ">
-                    <li>{{led.name}}</li>
-                    {% endfor %}
-                  </option>
-              
-                  <option> <li> <a href= ""> Create </a></li></option>
-                  
-
-                </select> </b><br>
+                          <h4>Party A/c Name:</h4><input type="text" name='particulars' class="form-control" id="under" onclick="showgrp();"></b>
+                 
+                 <h4>Current balance:</h4><br>
+                 <h4>Purchase ledger:</h4><input type="text" name='particulars' class="form-control" id="under1" onclick="showgrp1();"></b>
+                 <br>
                  Current balance:<br>
                 
                     <table class="table table-bordered table-hover" id="tab_logic">
@@ -197,9 +301,77 @@
                   </div>
                 </div>
               </form>
-              <script>
-                function newFunction() {
-            document.getElementById("newform").reset();
-         }
-              </script>
+
+              <div class="form-popup ScrollStyle" id="myForm1" style="background-color:  #213b52; color:white;" >
+                <form action="" class="form-container1" >
+
+                  <h6 style="background-color:rgb(17, 169, 240) ;color:white">List of Ledgers Account</h6>
+                    <button type="button" class="btn cancel close" onclick="closeForm()">X</button>
+                    <a  href="" style="margin-left:180px; cursor:pointer; color: white" >Create New</a>  
+            
+                <hr >
+                <div >
+                    <table >
+                    <tr >
+                        
+                                            <option onclick="setData('Cash')" class="btns_prnt" >Cash</option>
+                                            
+                                            
+            
+            
+            
+                    {% for i in led %}
+                   
+                
+                    <a class="btns_prnt" onclick="setGroup('{{i.name}}','{{i.id}}')"  class="content" 
+                    style="cursor:pointer;color:white">&nbsp;&nbsp;{{i.name}}</a><br>
+                    {% endfor %}
+                    </tr>
+                    </table>
+                </div>
+                <input type="text" name="underhidden" hidden value="{{i.id}}">
+                </form>
+            </div>
+
+
+
+            <div class="col-sm-3  m-0 p-0"></div>
+
+            <div class="form-popup ScrollStyle" id="myForm2" style="background-color:  #213b52; color:white;" >
+              <form action="" class="form-container1" >
+
+                <h6 style="background-color:rgb(17, 169, 240) ;color:white">List of Ledgers Account</h6>
+                  <button type="button" class="btn cancel close" onclick="closeForm1()">X</button>
+                  <a  href="" style="margin-left:180px; cursor:pointer; color: white" >Create New</a>  
+          
+              <hr >
+              <div >
+                  <table >
+                  <tr >
+                      
+                                          <option onclick="setData1('Cash')" class="btns_prnt" >Cash</option>
+                                          
+                                          
+          
+          
+          
+                  {% for i in led %}
+                 
+              
+                  <a class="btns_prnt" onclick="setGroup1('{{i.name}}','{{i.id}}')"  class="content" 
+                  style="cursor:pointer;color:black;">&nbsp;&nbsp;{{i.name}}</a><br>
+                  {% endfor %}
+                  </tr>
+                  </table>
+              </div>
+              <input type="text" name="underhidden" hidden value="{{i.id}}">
+              </form>
+          </div>
+          <div class="col-sm-3  m-0 p-0"></div>
+            
+            </div> 
+            
+            
+            
+        
 {% endblock %}

@@ -12,6 +12,7 @@ def purchase(request):
     # con=contra.objecs.all()
     led=tally_ledger.objects.all()
     return render(request,'purchase.html',{'bak':bak,'led':led})
+    
 def sales(request):
     bak=bank.objects.all()
     # con=contra.objects.all()
